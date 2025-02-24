@@ -1,9 +1,8 @@
 import time 
 import random
 import queue
-
-
 from threading import Thread
+
 
 counter = 0
 job_queue = queue.Queue()
@@ -14,8 +13,10 @@ def increment_manager():
     global counter
     while True:
         increment = counter_queue.get()
+        time.sleep(random.random())
         old_counter = counter
         counter = old_counter + increment
+        time.sleep(random.random())
         job_queue.put((f'New counter value is {counter}', '------'))
         counter_queue.task_done()
 
@@ -23,13 +24,14 @@ def increment_manager():
 Thread(target=increment_manager, daemon=True).start()
 
 
-def printer_manageer():
+def printer_manager():
     while True:
         for line in job_queue.get():
+            time.sleep(random.random())
             print(line)
         job_queue.task_done()
 
-Thread(target=printer_manageer, daemon=True).start()
+Thread(target=printer_manager, daemon=True).start()
 
 
 def increment_counter():
