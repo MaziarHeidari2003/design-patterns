@@ -9,29 +9,28 @@ job_queue = queue.Queue()
 counter_queue = queue.Queue()
 
 
-def increment_manager():
+
+def increament_manager():
     global counter
     while True:
-        increment = counter_queue.get()
-        time.sleep(random.random())
+        increament = counter_queue.get()
         old_counter = counter
-        counter = old_counter + increment
-        time.sleep(random.random())
+        counter = old_counter + increament
         job_queue.put((f'New counter value is {counter}', '------'))
         counter_queue.task_done()
 
 
-Thread(target=increment_manager, daemon=True).start()
+Thread(target=increament_manager, daemon=True).start()
 
 
-def printer_manager():
+def print_manager():
     while True:
         for line in job_queue.get():
-            time.sleep(random.random())
             print(line)
         job_queue.task_done()
 
-Thread(target=printer_manager, daemon=True).start()
+
+Thread(target=print_manager, daemon=True).start()
 
 
 def increment_counter():
